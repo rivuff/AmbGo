@@ -31,18 +31,17 @@ public class RedisLocationServiceImpl implements LocationService{
 
     @Override
     public Boolean saveDriverLocation(String driverId, Double latitude, Double longitude) {
-        // TODO Auto-generated method stub
-        try {
-            GeoOperations<String, String> geoOperations = stringRedisTemplate.opsForGeo();
-
-            geoOperations.add(DRIVER_GEO_OPS_KEY, 
-                new RedisGeoCommands.GeoLocation<>(driverId, new Point(latitude, longitude))
-            ); 
-            return true;
-        } catch (Exception e) {
-            throw new UnsupportedOperationException("Unimplemented method 'saveDriverLocation'");
-
+        if (driverId == null || driverId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Driver ID can't be empty");
         }
+
+        GeoOperations<String, String> geoOperations = stringRedisTemplate.opsForGeo();
+
+        Long added = geoOperations.add(DRIVER_GEO_OPS_KEY, 
+            new RedisGeoCommands.GeoLocation<>(driverId, new Point(longitude, latitude))
+        ); 
+        
+        return added != null;
     }
 
     @Override
@@ -72,7 +71,6 @@ public class RedisLocationServiceImpl implements LocationService{
 
         return driverLocations;
 
-        // TODO Auto-generated method stub
     }
     
 }
