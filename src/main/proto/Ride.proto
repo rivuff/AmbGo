@@ -20,3 +20,20 @@ message RideAcceptanceResponse{
 service RideService{
     rpc acceptRide(RideAcceptenceRequest) returns (RideAcceptanceResponse);
 }
+
+service RideNotificationService{
+    rpc notifyDriversForNewRide(RideNotificationRequest) returns (RideNotificationResponse);
+}
+
+message RideNotificationRequest{
+    int64 pickUpLattitude=1;
+    int64 pickUpLongtide=2;
+    int64 distance =3;
+    string fare=4;
+    int32 bookingId=5;
+    repeated int64 driverId=6;
+}
+
+message RideNotificationResponse{
+    bool success =1;
+}
